@@ -3,16 +3,17 @@ import { useState } from "react";
 
 interface HeaderProps {
   onRefresh: () => void;
+  newsCount: number;
 }
 
-const Header: React.FC<HeaderProps> = ({ onRefresh }) => {
+const Header: React.FC<HeaderProps> = ({ onRefresh, newsCount }) => {
   const [lastUpdate, setLastUpdate] = useState<string>("");
 
   const handleRefresh = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/api/refresh`);
       setLastUpdate(new Date().toLocaleTimeString("it-IT"));
-      onRefresh(); // Ricarica la mappa
+      onRefresh(); // ricarica la mappa
     } catch (err) {
       console.error("Errore durante l'aggiornamento:", err);
     }
@@ -31,13 +32,17 @@ const Header: React.FC<HeaderProps> = ({ onRefresh }) => {
     >
       <h2 style={{ margin: 0 }}>🌍 NewsMap</h2>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-        {/* Mostra l'orario di ultimo aggiornamento */}
-        {lastUpdate && (
-          <span style={{ color: "#aaa", fontSize: "0.9rem" }}>
-            Ultimo aggiornamento: {lastUpdate}
-          </span>
-        )}
+      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        {/* Mostra contatore e ora */}
+        <span style={{ color: "#aaa", fontSize: "0.9rem" }}>
+          📰 {newsCount} notizie attive
+          {lastUpdate && (
+            <>
+              {" | "}
+              Ultimo aggiornamento: {lastUpdate}
+            </>
+          )}
+        </span>
 
         <button
           onClick={handleRefresh}

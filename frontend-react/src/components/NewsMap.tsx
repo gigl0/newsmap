@@ -6,19 +6,21 @@ import { fetchNews, News } from "../api/news";
 
 interface NewsMapProps {
   refreshTrigger: number;
+  onCountChange: (count: number) => void;
 }
 
-const NewsMap: React.FC<NewsMapProps> = ({ refreshTrigger }) => {
+const NewsMap: React.FC<NewsMapProps> = ({ refreshTrigger, onCountChange }) => {
   const [news, setNews] = useState<News[]>([]);
 
   const loadNews = async () => {
     const data = await fetchNews();
     setNews(data);
+    onCountChange(data.filter((n) => n.lat && n.lon).length);
   };
 
   useEffect(() => {
     loadNews();
-  }, [refreshTrigger]); // si aggiorna quando refreshTrigger cambia
+  }, [refreshTrigger]);
 
   const defaultIcon = new L.Icon({
     iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
@@ -37,7 +39,6 @@ const NewsMap: React.FC<NewsMapProps> = ({ refreshTrigger }) => {
         url={`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${process.env.REACT_APP_GEOAPIFY_KEY}`}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-
       {news
         .filter((n) => n.lat && n.lon)
         .map((n) => (
@@ -59,20 +60,16 @@ const NewsMap: React.FC<NewsMapProps> = ({ refreshTrigger }) => {
                     }}
                   />
                 )}
-
                 <strong>{n.title}</strong>
                 <br />
                 {n.source && <em>{n.source}</em>}
                 <br />
-
-                {/* 🕓 Aggiunta ora di pubblicazione */}
                 {n.published_at && (
                   <small style={{ color: "gray" }}>
                     🕓 {new Date(n.published_at).toLocaleString("it-IT")}
                   </small>
                 )}
                 <br />
-
                 <a href={n.url} target="_blank" rel="noreferrer">
                   Leggi di più
                 </a>
