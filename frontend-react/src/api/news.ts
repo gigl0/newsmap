@@ -10,6 +10,7 @@ export interface News {
   source?: string;
   lat?: number;
   lon?: number;
+  published_at?: string;
 }
 
 export async function fetchNews(): Promise<News[]> {
