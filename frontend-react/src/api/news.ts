@@ -13,6 +13,6 @@ export interface News {
 }
 
 export async function fetchNews(): Promise<News[]> {
-  const res = await axios.get(`${API_URL}/api/news`);
+  const res = await axios.get<News[]>(`${API_URL}/api/news`);
   return res.data;
 }
