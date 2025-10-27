@@ -9,6 +9,6 @@ Backend FastAPI che raccoglie notizie globali, le geocodifica con **Geoapify** e
 - **NewsAPI** per le notizie globali
 - **APScheduler** per aggiornamenti periodici
 
-### ▶️ Esecuzione
+### Esecuzione
 ```bash
 uvicorn app.main:app --reload
