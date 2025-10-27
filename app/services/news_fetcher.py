@@ -13,18 +13,18 @@ NEWS_URL = "https://newsapi.org/v2/top-headlines?language=en&pageSize=10&apiKey=
 def fetch_top_news():
     """Scarica le top news dal mondo usando NewsAPI."""
     if not NEWS_API_KEY:
-        print("⚠️  Nessuna chiave NEWS_API_KEY impostata.")
+        print("X Nessuna chiave NEWS_API_KEY impostata.")
         return []
 
-    print("📰 Scaricamento notizie da NewsAPI...")
+    print("2- o.O Scaricamento notizie da NewsAPI...")
     resp = requests.get(NEWS_URL.format(key=NEWS_API_KEY))
     if resp.status_code != 200:
-        print("❌ Errore NewsAPI:", resp.status_code, resp.text)
+        print("@_@ Errore NewsAPI:", resp.status_code, resp.text)
         return []
 
     data = resp.json()
     articles = data.get("articles", [])
-    print(f"✅ Trovate {len(articles)} notizie.")
+    print(f"3-Trovate {len(articles)} notizie.")
     return articles
 
 
@@ -44,7 +44,7 @@ def geocode_location(location_name):
         loc = results[0]
         return {"lat": loc["lat"], "lon": loc["lon"]}
     except Exception as e:
-        print("❌ Errore durante la geocodifica:", e)
+        print("Errore durante la geocodifica:", e)
         return None
 
 
@@ -83,7 +83,7 @@ def save_news_to_db(news_list):
 
     conn.commit()
     conn.close()
-    print("💾 Notizie salvate nel database.")
+    print("4-Notizie salvate nel database.")
 
 
 def update_news():

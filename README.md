@@ -12,3 +12,9 @@ Backend FastAPI che raccoglie notizie globali, le geocodifica con **Geoapify** e
 ### Esecuzione
 ```bash
 uvicorn app.main:app --reload
+
+### Scheduler automatico
+Il backend aggiorna le notizie automaticamente ogni ora grazie ad **APScheduler**.
+All’avvio:
+1. Esegue subito un aggiornamento iniziale.
+2. Avvia il job `update_news()` ogni 60 minuti in background.

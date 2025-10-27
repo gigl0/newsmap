@@ -4,8 +4,7 @@ from fastapi import FastAPI
 from app.routers import news_router
 from app.db import init_db
 from app.services.news_fetcher import update_news
-from dotenv import load_dotenv
-load_dotenv()  # carica le variabili da .env
+from app.services.scheduler import start_scheduler
 
 app = FastAPI(
     title="NewsMap API",
@@ -25,5 +24,6 @@ def root():
 
 @app.on_event("startup")
 def startup_event():
-    print("🚀 Avvio applicazione... aggiornamento iniziale notizie.")
+    print("1-Avvio applicazione... aggiornamento iniziale notizie.")
     update_news()
+    start_scheduler()
