@@ -27,6 +27,7 @@ init_db()
 
 # Include news routes
 app.include_router(news_router.router, prefix="/api", tags=["News"])
+app.include_router(news_router.router, prefix="/api", tags=["News"])
 
 @app.get("/")
 def root():
@@ -37,3 +38,4 @@ def startup_event():
     print("1-Avvio applicazione... aggiornamento iniziale notizie.")
     update_news()
     start_scheduler()
+
