@@ -1,8 +1,12 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import L, { Icon } from "leaflet";
 import { useEffect, useState } from "react";
 import { fetchNews, News } from "../api/news";
+
 
 interface NewsMapProps {
   refreshTrigger: number;
@@ -39,44 +43,53 @@ const NewsMap: React.FC<NewsMapProps> = ({ refreshTrigger, onCountChange }) => {
         url={`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${process.env.REACT_APP_GEOAPIFY_KEY}`}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {news
-        .filter((n) => n.lat && n.lon)
-        .map((n) => (
-          <Marker
-            key={n.id}
-            position={[n.lat!, n.lon!] as [number, number]}
-            icon={defaultIcon as Icon}
-          >
-            <Popup>
-              <div style={{ textAlign: "center", maxWidth: "220px" }}>
-                {n.image && (
-                  <img
-                    src={n.image}
-                    alt={n.title}
-                    style={{
-                      width: "200px",
-                      borderRadius: "8px",
-                      marginBottom: "8px",
-                    }}
-                  />
-                )}
-                <strong>{n.title}</strong>
-                <br />
-                {n.source && <em>{n.source}</em>}
-                <br />
-                {n.published_at && (
-                  <small style={{ color: "gray" }}>
-                    🕓 {new Date(n.published_at).toLocaleString("it-IT")}
-                  </small>
-                )}
-                <br />
-                <a href={n.url} target="_blank" rel="noreferrer">
-                  Leggi di più
-                </a>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+
+      {/* Cluster wrapper */}
+      <MarkerClusterGroup
+        chunkedLoading
+        maxClusterRadius={50}
+        spiderfyOnMaxZoom
+        showCoverageOnHover={false}
+      >
+        {news
+          .filter((n) => n.lat && n.lon)
+          .map((n) => (
+            <Marker
+              key={n.id}
+              position={[n.lat!, n.lon!] as [number, number]}
+              icon={defaultIcon as Icon}
+            >
+              <Popup>
+                <div style={{ textAlign: "center", maxWidth: "220px" }}>
+                  {n.image && (
+                    <img
+                      src={n.image}
+                      alt={n.title}
+                      style={{
+                        width: "200px",
+                        borderRadius: "8px",
+                        marginBottom: "8px",
+                      }}
+                    />
+                  )}
+                  <strong>{n.title}</strong>
+                  <br />
+                  {n.source && <em>{n.source}</em>}
+                  <br />
+                  {n.published_at && (
+                    <small style={{ color: "gray" }}>
+                      🕓 {new Date(n.published_at).toLocaleString("it-IT")}
+                    </small>
+                  )}
+                  <br />
+                  <a href={n.url} target="_blank" rel="noreferrer">
+                    Leggi di più
+                  </a>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 };
